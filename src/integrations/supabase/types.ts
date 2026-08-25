@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           case_id: string
           created_at: string
+          created_by: string | null
           id: string
           investigator_note: string | null
           outcome: string | null
@@ -25,6 +26,7 @@ export type Database = {
         Insert: {
           case_id: string
           created_at?: string
+          created_by?: string | null
           id?: string
           investigator_note?: string | null
           outcome?: string | null
@@ -32,6 +34,7 @@ export type Database = {
         Update: {
           case_id?: string
           created_at?: string
+          created_by?: string | null
           id?: string
           investigator_note?: string | null
           outcome?: string | null
@@ -52,6 +55,7 @@ export type Database = {
           alert_id: string | null
           attached_evidence: Json
           created_at: string
+          created_by: string | null
           decision: string | null
           id: string
           network_id: string | null
@@ -67,6 +71,7 @@ export type Database = {
           alert_id?: string | null
           attached_evidence?: Json
           created_at?: string
+          created_by?: string | null
           decision?: string | null
           id?: string
           network_id?: string | null
@@ -82,6 +87,7 @@ export type Database = {
           alert_id?: string | null
           attached_evidence?: Json
           created_at?: string
+          created_by?: string | null
           decision?: string | null
           id?: string
           network_id?: string | null
@@ -96,6 +102,7 @@ export type Database = {
       }
       scenario_runs: {
         Row: {
+          created_by: string | null
           detected: boolean
           detection_gap: boolean
           generation: number
@@ -108,6 +115,7 @@ export type Database = {
           signals: Json
         }
         Insert: {
+          created_by?: string | null
           detected?: boolean
           detection_gap?: boolean
           generation?: number
@@ -120,6 +128,7 @@ export type Database = {
           signals?: Json
         }
         Update: {
+          created_by?: string | null
           detected?: boolean
           detection_gap?: boolean
           generation?: number
