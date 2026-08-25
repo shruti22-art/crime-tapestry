@@ -90,24 +90,29 @@ export function NetworkGraph({
   clusterId,
   selected,
   onSelect,
+  onEdgeSelect,
   excludedAccounts = new Set<string>(),
   excludedTxns = new Set<string>(),
   storyCursor = null,
   minAmount = 0,
+  amountCeiling = Number.POSITIVE_INFINITY,
   className,
   height = 560,
 }: {
   clusterId: string;
   selected?: string | null;
   onSelect?: (id: string) => void;
+  onEdgeSelect?: (txn: Transaction) => void;
   excludedAccounts?: Set<string>;
   excludedTxns?: Set<string>;
   /** 0..1 chronological reveal for Fraud Story Mode; null = show everything */
   storyCursor?: number | null;
   minAmount?: number;
+  amountCeiling?: number;
   className?: string;
   height?: number;
 }) {
+
   const width = 980;
   const [hover, setHover] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -171,6 +176,8 @@ export function NetworkGraph({
       !excludedAccounts.has(e.source) &&
       !excludedAccounts.has(e.target) &&
       e.amount >= minAmount &&
+      e.amount <= amountCeiling &&
+
       (storyCursor === null || e.t <= storyCursor),
   );
   const activeNodeIds = new Set<string>();
@@ -229,7 +236,17 @@ export function NetworkGraph({
           const x2 = t.x - (dx / d) * pad;
           const y2 = t.y - (dy / d) * pad;
           return (
-            <g key={e.id} className={suspicious ? "text-risk-high" : "text-muted-foreground"}>
+            <g
+              key={e.id}
+              className={cn(
+                suspicious ? "text-risk-high" : "text-muted-foreground",
+                onEdgeSelect && "cursor-pointer",
+              )}
+              onClick={onEdgeSelect ? () => onEdgeSelect(e.txn) : undefined}
+            >
+              {onEdgeSelect && (
+                <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="transparent" strokeWidth={12} />
+              )}
               <line
                 x1={x1}
                 y1={y1}
@@ -241,6 +258,7 @@ export function NetworkGraph({
                 markerEnd="url(#arrow)"
                 className={highlighted && suspicious ? "animate-flow" : undefined}
               />
+
               {highlighted && (
                 <text
                   x={(x1 + x2) / 2}
