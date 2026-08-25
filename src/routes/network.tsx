@@ -156,7 +156,7 @@ function NetworkPage() {
                       params={{ accountId: id }}
                       className="min-w-0 flex-1 truncate"
                     >
-                      <Mono className={off ? "line-through opacity-50" : undefined}>{id}</Mono>
+                      <Mono className={off ? "line-through opacity-50" : ""}>{id}</Mono>
                       <span className="ml-2 truncate text-[11px] text-muted-foreground">{a.holder}</span>
                     </Link>
                     <RiskBadge score={a.risk_score} size="sm" showScore={false} />
