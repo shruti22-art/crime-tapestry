@@ -90,24 +90,29 @@ export function NetworkGraph({
   clusterId,
   selected,
   onSelect,
+  onEdgeSelect,
   excludedAccounts = new Set<string>(),
   excludedTxns = new Set<string>(),
   storyCursor = null,
   minAmount = 0,
+  amountCeiling = Number.POSITIVE_INFINITY,
   className,
   height = 560,
 }: {
   clusterId: string;
   selected?: string | null;
   onSelect?: (id: string) => void;
+  onEdgeSelect?: (txn: Transaction) => void;
   excludedAccounts?: Set<string>;
   excludedTxns?: Set<string>;
   /** 0..1 chronological reveal for Fraud Story Mode; null = show everything */
   storyCursor?: number | null;
   minAmount?: number;
+  amountCeiling?: number;
   className?: string;
   height?: number;
 }) {
+
   const width = 980;
   const [hover, setHover] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
