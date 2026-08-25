@@ -176,6 +176,8 @@ export function NetworkGraph({
       !excludedAccounts.has(e.source) &&
       !excludedAccounts.has(e.target) &&
       e.amount >= minAmount &&
+      e.amount <= amountCeiling &&
+
       (storyCursor === null || e.t <= storyCursor),
   );
   const activeNodeIds = new Set<string>();
