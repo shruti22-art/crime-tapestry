@@ -236,7 +236,17 @@ export function NetworkGraph({
           const x2 = t.x - (dx / d) * pad;
           const y2 = t.y - (dy / d) * pad;
           return (
-            <g key={e.id} className={suspicious ? "text-risk-high" : "text-muted-foreground"}>
+            <g
+              key={e.id}
+              className={cn(
+                suspicious ? "text-risk-high" : "text-muted-foreground",
+                onEdgeSelect && "cursor-pointer",
+              )}
+              onClick={onEdgeSelect ? () => onEdgeSelect(e.txn) : undefined}
+            >
+              {onEdgeSelect && (
+                <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="transparent" strokeWidth={12} />
+              )}
               <line
                 x1={x1}
                 y1={y1}
@@ -248,6 +258,7 @@ export function NetworkGraph({
                 markerEnd="url(#arrow)"
                 className={highlighted && suspicious ? "animate-flow" : undefined}
               />
+
               {highlighted && (
                 <text
                   x={(x1 + x2) / 2}
