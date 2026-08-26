@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Network, Pause, Play, RotateCcw, X } from "lucide-react";
 import {
   PATTERN_META,
@@ -11,9 +11,10 @@ import {
   type RiskLevel,
   type Transaction,
 } from "@/lib/trace/engine";
-import { compactCurrency, currency, dateTime } from "@/lib/trace/format";
+import { compactCurrency, dateTime } from "@/lib/trace/format";
 import { Meter, Mono, PatternBadge, RiskBadge, ScoreRing, SectionTitle } from "@/components/trace/primitives";
 import { NetworkGraph } from "@/components/trace/NetworkGraph";
+import { ConnectionsList, useAccountConnections } from "@/components/trace/ConnectionsList";
 import { useTrace } from "@/lib/trace/context";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
