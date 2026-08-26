@@ -470,22 +470,7 @@ function AccountDrawer({
   onToggle: (id: string) => void;
 }) {
   const account = accountId ? db.getAccount(accountId) : undefined;
-  const connections = useMemo(() => {
-    if (!accountId) return [];
-    const map = new Map<string, { id: string; count: number; value: number; direction: string }>();
-    db.accountTransactions(accountId).forEach((t) => {
-      const other = t.sender_id === accountId ? t.receiver_id : t.sender_id;
-      const dir = t.sender_id === accountId ? "out" : "in";
-      const prev = map.get(other);
-      map.set(other, {
-        id: other,
-        count: (prev?.count ?? 0) + 1,
-        value: (prev?.value ?? 0) + t.amount,
-        direction: prev && prev.direction !== dir ? "both" : dir,
-      });
-    });
-    return [...map.values()].sort((a, b) => b.value - a.value);
-  }, [accountId]);
+  const connections = useAccountConnections(accountId);
 
   return (
     <Sheet open={!!account} onOpenChange={(o) => !o && onClose()}>
@@ -493,7 +478,15 @@ function AccountDrawer({
         {account && (
           <>
             <SheetHeader>
-              <SheetTitle className="mono text-sm">{account.id}</SheetTitle>
+              <SheetTitle className="mono text-sm">
+                <Link
+                  to="/accounts/$accountId"
+                  params={{ accountId: account.id }}
+                  className="text-signal underline-offset-2 hover:underline"
+                >
+                  {account.id}
+                </Link>
+              </SheetTitle>
             </SheetHeader>
             <div className="mt-4 space-y-4">
               <div className="flex items-center justify-between gap-3">
@@ -506,36 +499,27 @@ function AccountDrawer({
                 <RiskBadge score={account.risk_score} />
               </div>
 
-              <Button
-                size="sm"
-                variant={excluded.has(account.id) ? "secondary" : "outline"}
-                onClick={() => onToggle(account.id)}
-              >
-                {excluded.has(account.id) ? "Include in scoring" : "Exclude from scoring"}
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant={excluded.has(account.id) ? "secondary" : "outline"}
+                  onClick={() => onToggle(account.id)}
+                >
+                  {excluded.has(account.id) ? "Include in scoring" : "Exclude from scoring"}
+                </Button>
+                <Button size="sm" variant="ghost" asChild>
+                  <Link to="/accounts/$accountId" params={{ accountId: account.id }}>
+                    Open account profile
+                  </Link>
+                </Button>
+              </div>
 
               <div>
                 <SectionTitle title="Connections" hint={`${connections.length} counterparties in the corpus.`} />
-                <ul className="space-y-1">
-                  {connections.map((c) => (
-                    <li
-                      key={c.id}
-                      className="flex items-center justify-between gap-2 rounded-md border border-border px-2 py-1.5"
-                    >
-                      <Mono className="truncate text-[11px]">{c.id}</Mono>
-                      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                        {c.direction}
-                      </span>
-                      <span className="mono text-[11px]">{currency(c.value)}</span>
-                      <span className="text-[10px] text-muted-foreground">{c.count}×</span>
-                    </li>
-                  ))}
-                </ul>
+                <ConnectionsList connections={connections} />
               </div>
-              <p className="text-[11px] text-muted-foreground">
-                Full behavioural history lands with the Account Profile module.
-              </p>
             </div>
+
           </>
         )}
       </SheetContent>
