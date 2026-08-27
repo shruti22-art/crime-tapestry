@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as LabRouteImport } from './routes/lab'
 import { Route as NetworkRouteImport } from './routes/network'
+import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as TracerRouteImport } from './routes/tracer'
 import { Route as AccountsAccountIdRouteImport } from './routes/accounts.$accountId'
 
@@ -36,6 +37,11 @@ const NetworkRoute = NetworkRouteImport.update({
   path: '/network',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TracerRoute = TracerRouteImport.update({
   id: '/tracer',
   path: '/tracer',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AlertsRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
+  '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
+  '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
 }
@@ -69,21 +77,36 @@ export interface FileRoutesById {
   '/alerts': typeof AlertsRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
+  '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/alerts' | '/lab' | '/network' | '/tracer' | '/accounts/$accountId'
+    | '/'
+    | '/alerts'
+    | '/lab'
+    | '/network'
+    | '/timeline'
+    | '/tracer'
+    | '/accounts/$accountId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/alerts' | '/lab' | '/network' | '/tracer' | '/accounts/$accountId'
+  to:
+    | '/'
+    | '/alerts'
+    | '/lab'
+    | '/network'
+    | '/timeline'
+    | '/tracer'
+    | '/accounts/$accountId'
   id:
     | '__root__'
     | '/'
     | '/alerts'
     | '/lab'
     | '/network'
+    | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
   fileRoutesById: FileRoutesById
@@ -93,6 +116,7 @@ export interface RootRouteChildren {
   AlertsRoute: typeof AlertsRoute
   LabRoute: typeof LabRoute
   NetworkRoute: typeof NetworkRoute
+  TimelineRoute: typeof TimelineRoute
   TracerRoute: typeof TracerRoute
   AccountsAccountIdRoute: typeof AccountsAccountIdRoute
 }
@@ -127,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NetworkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tracer': {
       id: '/tracer'
       path: '/tracer'
@@ -149,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsRoute: AlertsRoute,
   LabRoute: LabRoute,
   NetworkRoute: NetworkRoute,
+  TimelineRoute: TimelineRoute,
   TracerRoute: TracerRoute,
   AccountsAccountIdRoute: AccountsAccountIdRoute,
 }
