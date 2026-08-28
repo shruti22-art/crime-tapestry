@@ -91,18 +91,19 @@ function TimelinePage() {
       };
     });
 
-    const statusEvents: TimelineEvent[] = cluster.member_account_ids
-      .map((id) => db.getAccount(id))
-      .filter((a) => a !== undefined && a.current_status !== "Active")
-      .map((a) => ({
-        id: `status-${a.id}`,
-        timestamp: a.created_at,
+    const statusEvents: TimelineEvent[] = cluster.member_account_ids.flatMap((id) => {
+      const account = db.getAccount(id);
+      if (!account || account.current_status === "Active") return [];
+      return [{
+        id: `status-${account.id}`,
+        timestamp: account.created_at,
         kind: "status" as const,
-        score: a.risk_score,
-        accountId: a.id,
-        title: `Account ${a.current_status.toLowerCase()}`,
-        detail: `${a.holder} · ${a.role_tag}`,
-      }));
+        score: account.risk_score,
+        accountId: account.id,
+        title: `Account ${account.current_status.toLowerCase()}`,
+        detail: `${account.holder} · ${account.role_tag}`,
+      }];
+    });
 
     return [...txnEvents, ...statusEvents].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
   }, [cluster]);
