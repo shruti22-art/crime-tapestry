@@ -93,7 +93,7 @@ function TimelinePage() {
 
     const statusEvents: TimelineEvent[] = cluster.member_account_ids
       .map((id) => db.getAccount(id))
-      .filter((a): a is NonNullable<typeof a> => Boolean(a) && a!.current_status !== "Active")
+      .filter((a): a is NonNullable<typeof a> => Boolean(a) && a.current_status !== "Active")
       .map((a) => ({
         id: `status-${a.id}`,
         timestamp: a.created_at,
@@ -131,9 +131,9 @@ function TimelinePage() {
   const totalValue = filtered.reduce((s, e) => s + (e.txn?.amount ?? 0), 0);
   const span =
     filtered.length > 1
-      ? `${dayOnly(filtered[0]!.timestamp)} → ${dayOnly(filtered[filtered.length - 1]!.timestamp)}`
+      ? `${dayOnly(filtered[0]?.timestamp ?? "")} → ${dayOnly(filtered[filtered.length - 1]?.timestamp ?? "")}`
       : filtered.length === 1
-        ? dayOnly(filtered[0]!.timestamp)
+        ? dayOnly(filtered[0]?.timestamp ?? "")
         : "—";
 
   return (
