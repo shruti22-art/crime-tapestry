@@ -93,7 +93,7 @@ function TimelinePage() {
 
     const statusEvents: TimelineEvent[] = cluster.member_account_ids
       .map((id) => db.getAccount(id))
-      .filter((a): a is NonNullable<typeof a> => Boolean(a) && a.current_status !== "Active")
+      .filter((a) => a !== undefined && a.current_status !== "Active")
       .map((a) => ({
         id: `status-${a.id}`,
         timestamp: a.created_at,
