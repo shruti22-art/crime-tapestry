@@ -17,13 +17,13 @@ import { Badge } from "@/components/ui/badge";
 export const Route = createFileRoute("/lab")({
   head: () => ({
     meta: [
-      { title: "Adversarial Detection Lab · TRACE" },
+      { title: "Adversarial Detection Lab · TRACE-X" },
       {
         name: "description",
         content:
-          "Stress-test the TRACE detection engine with evolving synthetic fraud scenarios and surface detection gaps before criminals do.",
+          "Stress-test the TRACE-X detection engine with evolving synthetic fraud scenarios and surface detection gaps before criminals do.",
       },
-      { property: "og:title", content: "Adversarial Detection Lab · TRACE" },
+      { property: "og:title", content: "Adversarial Detection Lab · TRACE-X" },
       {
         property: "og:description",
         content: "Run adversarial fraud simulations, watch scenarios mutate across generations and expose blind spots.",

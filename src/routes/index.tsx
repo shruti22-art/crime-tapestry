@@ -27,13 +27,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "TRACE Dashboard — Financial Crime Command Center" },
+      { title: "TRACE-X Dashboard — Financial Crime Command Center" },
       {
         name: "description",
         content:
-          "Live overview of suspicious networks, alert severity, detection KPIs and emerging fraud clusters across the synthetic TRACE corpus.",
+          "Live overview of suspicious networks, alert severity, detection KPIs and emerging fraud clusters across the synthetic TRACE-X corpus.",
       },
-      { property: "og:title", content: "TRACE Dashboard — Financial Crime Command Center" },
+      { property: "og:title", content: "TRACE-X Dashboard — Financial Crime Command Center" },
       {
         property: "og:description",
         content: "Active alerts, critical networks, detection statistics and emerging clusters in one cockpit view.",

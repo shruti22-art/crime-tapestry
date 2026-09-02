@@ -20,13 +20,13 @@ import { bandOf } from "@/lib/trace/engine";
 export const Route = createFileRoute("/accounts/$accountId")({
   head: () => ({
     meta: [
-      { title: "Account Profile · TRACE" },
+      { title: "Account Profile · TRACE-X" },
       {
         name: "description",
         content:
-          "Inspect a synthetic account's baseline behaviour, deviation signals, counterparties and full transaction history inside the TRACE investigation cockpit.",
+          "Inspect a synthetic account's baseline behaviour, deviation signals, counterparties and full transaction history inside the TRACE-X investigation cockpit.",
       },
-      { property: "og:title", content: "Account Profile · TRACE" },
+      { property: "og:title", content: "Account Profile · TRACE-X" },
       {
         property: "og:description",
         content: "Baseline vs current behaviour, network role and transaction history for a traced account.",

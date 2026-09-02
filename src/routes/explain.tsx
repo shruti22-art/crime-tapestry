@@ -34,13 +34,13 @@ import {
 export const Route = createFileRoute("/explain")({
   head: () => ({
     meta: [
-      { title: "Why Flagged? · TRACE Explainability" },
+      { title: "Why Flagged? · TRACE-X Explainability" },
       {
         name: "description",
         content:
-          "Full weighted-signal breakdown behind any TRACE risk score — plain-language reasoning, signal contributions and the evidence driving each one.",
+          "Full weighted-signal breakdown behind any TRACE-X risk score — plain-language reasoning, signal contributions and the evidence driving each one.",
       },
-      { property: "og:title", content: "Why Flagged? · TRACE Explainability" },
+      { property: "og:title", content: "Why Flagged? · TRACE-X Explainability" },
       {
         property: "og:description",
         content: "See exactly which behaviour, network and velocity signals produced a risk score, and the evidence behind them.",
@@ -192,7 +192,7 @@ function ExplainPage() {
             <ScanSearch className="size-4 text-signal" /> Why Flagged?
           </h1>
           <p className="text-xs text-muted-foreground">
-            Every point of a TRACE risk score, attributed to a weighted signal and the evidence behind it.
+            Every point of a TRACE-X risk score, attributed to a weighted signal and the evidence behind it.
           </p>
         </div>
         <div className="flex flex-wrap items-end gap-3">
@@ -251,7 +251,7 @@ function ExplainPage() {
         <EmptyState
           icon={<ScanSearch className="size-6" />}
           title="Nothing selected to explain"
-          description="Pick an alert, a network, or an account above and TRACE will decompose its risk score into weighted signals with supporting evidence."
+          description="Pick an alert, a network, or an account above and TRACE-X will decompose its risk score into weighted signals with supporting evidence."
         />
       ) : (
         <>
