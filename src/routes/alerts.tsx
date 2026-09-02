@@ -19,13 +19,13 @@ import {
 export const Route = createFileRoute("/alerts")({
   head: () => ({
     meta: [
-      { title: "Alert Queue — TRACE" },
+      { title: "Alert Queue — TRACE-X" },
       {
         name: "description",
         content:
           "Filter and triage suspicious network alerts by risk level, pattern type, amount, time range and investigation status.",
       },
-      { property: "og:title", content: "Alert Queue — TRACE" },
+      { property: "og:title", content: "Alert Queue — TRACE-X" },
       { property: "og:description", content: "Triage suspicious network alerts by risk, pattern and status." },
     ],
   }),

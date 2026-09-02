@@ -25,13 +25,13 @@ import {
 export const Route = createFileRoute("/timeline")({
   head: () => ({
     meta: [
-      { title: "Investigation Timeline · TRACE" },
+      { title: "Investigation Timeline · TRACE-X" },
       {
         name: "description",
         content:
           "Chronological reconstruction of a suspicious network's activity — every transaction and account state change, ordered in time.",
       },
-      { property: "og:title", content: "Investigation Timeline · TRACE" },
+      { property: "og:title", content: "Investigation Timeline · TRACE-X" },
       {
         property: "og:description",
         content: "Scrub through a fraud network's events in order, filtered by time range and risk level.",

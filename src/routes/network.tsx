@@ -30,13 +30,13 @@ import {
 export const Route = createFileRoute("/network")({
   head: () => ({
     meta: [
-      { title: "Network Investigation · TRACE" },
+      { title: "Network Investigation · TRACE-X" },
       {
         name: "description",
         content:
-          "Reconstruct suspicious money-movement networks, replay them chronologically and run what-if analysis on the active TRACE investigation.",
+          "Reconstruct suspicious money-movement networks, replay them chronologically and run what-if analysis on the active TRACE-X investigation.",
       },
-      { property: "og:title", content: "Network Investigation · TRACE" },
+      { property: "og:title", content: "Network Investigation · TRACE-X" },
       {
         property: "og:description",
         content: "Graph-first view of mule chains, layering and circular flows across the synthetic TRACE corpus.",

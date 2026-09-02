@@ -10,10 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountsRouteImport } from './routes/accounts'
+import { Route as AiRouteImport } from './routes/ai'
 import { Route as AlertsRouteImport } from './routes/alerts'
+import { Route as CasesRouteImport } from './routes/cases'
 import { Route as ExplainRouteImport } from './routes/explain'
 import { Route as LabRouteImport } from './routes/lab'
 import { Route as NetworkRouteImport } from './routes/network'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as TracerRouteImport } from './routes/tracer'
 import { Route as AccountsAccountIdRouteImport } from './routes/accounts.$accountId'
@@ -23,9 +27,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiRoute = AiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AlertsRoute = AlertsRouteImport.update({
   id: '/alerts',
   path: '/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CasesRoute = CasesRouteImport.update({
+  id: '/cases',
+  path: '/cases',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExplainRoute = ExplainRouteImport.update({
@@ -43,6 +62,11 @@ const NetworkRoute = NetworkRouteImport.update({
   path: '/network',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TimelineRoute = TimelineRouteImport.update({
   id: '/timeline',
   path: '/timeline',
@@ -54,27 +78,35 @@ const TracerRoute = TracerRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsAccountIdRoute = AccountsAccountIdRouteImport.update({
-  id: '/accounts/$accountId',
-  path: '/accounts/$accountId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$accountId',
+  path: '/$accountId',
+  getParentRoute: () => AccountsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRouteWithChildren
+  '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
+  '/cases': typeof CasesRoute
   '/explain': typeof ExplainRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
+  '/reports': typeof ReportsRoute
   '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRouteWithChildren
+  '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
+  '/cases': typeof CasesRoute
   '/explain': typeof ExplainRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
+  '/reports': typeof ReportsRoute
   '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
@@ -82,10 +114,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRouteWithChildren
+  '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
+  '/cases': typeof CasesRoute
   '/explain': typeof ExplainRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
+  '/reports': typeof ReportsRoute
   '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
@@ -94,30 +130,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/accounts'
+    | '/ai'
     | '/alerts'
+    | '/cases'
     | '/explain'
     | '/lab'
     | '/network'
+    | '/reports'
     | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/accounts'
+    | '/ai'
     | '/alerts'
+    | '/cases'
     | '/explain'
     | '/lab'
     | '/network'
+    | '/reports'
     | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
   id:
     | '__root__'
     | '/'
+    | '/accounts'
+    | '/ai'
     | '/alerts'
+    | '/cases'
     | '/explain'
     | '/lab'
     | '/network'
+    | '/reports'
     | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
@@ -125,13 +173,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountsRoute: typeof AccountsRouteWithChildren
+  AiRoute: typeof AiRoute
   AlertsRoute: typeof AlertsRoute
+  CasesRoute: typeof CasesRoute
   ExplainRoute: typeof ExplainRoute
   LabRoute: typeof LabRoute
   NetworkRoute: typeof NetworkRoute
+  ReportsRoute: typeof ReportsRoute
   TimelineRoute: typeof TimelineRoute
   TracerRoute: typeof TracerRoute
-  AccountsAccountIdRoute: typeof AccountsAccountIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -143,11 +194,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai': {
+      id: '/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/alerts': {
       id: '/alerts'
       path: '/alerts'
       fullPath: '/alerts'
       preLoaderRoute: typeof AlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cases': {
+      id: '/cases'
+      path: '/cases'
+      fullPath: '/cases'
+      preLoaderRoute: typeof CasesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explain': {
@@ -171,6 +243,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NetworkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/timeline': {
       id: '/timeline'
       path: '/timeline'
@@ -187,23 +266,38 @@ declare module '@tanstack/react-router' {
     }
     '/accounts/$accountId': {
       id: '/accounts/$accountId'
-      path: '/accounts/$accountId'
+      path: '/$accountId'
       fullPath: '/accounts/$accountId'
       preLoaderRoute: typeof AccountsAccountIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AccountsRoute
     }
   }
 }
 
+interface AccountsRouteChildren {
+  AccountsAccountIdRoute: typeof AccountsAccountIdRoute
+}
+
+const AccountsRouteChildren: AccountsRouteChildren = {
+  AccountsAccountIdRoute: AccountsAccountIdRoute,
+}
+
+const AccountsRouteWithChildren = AccountsRoute._addFileChildren(
+  AccountsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountsRoute: AccountsRouteWithChildren,
+  AiRoute: AiRoute,
   AlertsRoute: AlertsRoute,
+  CasesRoute: CasesRoute,
   ExplainRoute: ExplainRoute,
   LabRoute: LabRoute,
   NetworkRoute: NetworkRoute,
+  ReportsRoute: ReportsRoute,
   TimelineRoute: TimelineRoute,
   TracerRoute: TracerRoute,
-  AccountsAccountIdRoute: AccountsAccountIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -89,7 +89,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           {!sidebarCollapsed && (
             <div className="min-w-0">
-              <p className="mono text-sm font-semibold leading-none tracking-[0.2em]">TRACE</p>
+               <p className="mono text-sm font-semibold leading-none tracking-[0.2em]">TRACE-X</p>
               <p className="truncate text-[10px] text-muted-foreground">Risk Analysis &amp; Crime Exploration</p>
             </div>
           )}
@@ -239,7 +239,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </span>
               </TooltipTrigger>
               <TooltipContent className="max-w-xs">
-                All accounts, transactions and networks in TRACE are generated synthetic records. No real personal or
+                   All accounts, transactions and networks in TRACE-X are generated synthetic records. No real personal or
                 financial data is present.
               </TooltipContent>
             </Tooltip>
@@ -295,7 +295,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <footer className="border-t border-border px-4 py-3 lg:px-6">
           <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-muted-foreground">
             <p>
-              TRACE is an intelligence layer that integrates with existing banking, UPI, wallet and payment systems — not
+               TRACE-X is an intelligence layer that integrates with existing banking, UPI, wallet and payment systems — not
               a replacement payment app.
             </p>
             <div className="mono flex items-center gap-1.5 text-[9px] tracking-[0.12em]">
@@ -313,16 +313,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Dialog open={aboutOpen} onOpenChange={setAboutOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="mono tracking-[0.16em]">TRACE</DialogTitle>
+             <DialogTitle className="mono tracking-[0.16em]">TRACE-X</DialogTitle>
             <DialogDescription>One transaction can look normal. The network tells the truth.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm">
             <p className="rounded-md border border-signal/30 bg-signal/8 p-3 text-[13px]">
-              Most fraud systems learn from yesterday's fraud. TRACE stress-tests its detection engine with evolving
+               Most fraud systems learn from yesterday's fraud. TRACE-X stress-tests its detection engine with evolving
               synthetic fraud scenarios to discover blind spots before they become real weaknesses.
             </p>
             <p className="text-muted-foreground">
-              TRACE is an investigation cockpit for financial-crime analysts: it surfaces suspicious networks, traces
+               TRACE-X is an investigation cockpit for financial-crime analysts: it surfaces suspicious networks, traces
               money across accounts, explains why something was flagged, and packages evidence into cases. It is an
               intelligence layer over existing banking, UPI, wallet and payment rails — not a payment app and not a
               standalone fraud/not-fraud classifier.

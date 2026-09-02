@@ -25,13 +25,13 @@ import {
 export const Route = createFileRoute("/tracer")({
   head: () => ({
     meta: [
-      { title: "Money Tracer · TRACE" },
+      { title: "Money Tracer · TRACE-X" },
       {
         name: "description",
         content:
-          "Follow funds hop by hop from a source account through intermediaries to their destination across the synthetic TRACE corpus.",
+          "Follow funds hop by hop from a source account through intermediaries to their destination across the synthetic TRACE-X corpus.",
       },
-      { property: "og:title", content: "Money Tracer · TRACE" },
+      { property: "og:title", content: "Money Tracer · TRACE-X" },
       {
         property: "og:description",
         content: "Linear multi-hop money-flow tracing with running totals, hop counts and per-hop risk colouring.",
