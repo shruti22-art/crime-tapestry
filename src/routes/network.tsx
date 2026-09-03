@@ -39,7 +39,7 @@ export const Route = createFileRoute("/network")({
       { property: "og:title", content: "Network Investigation · TRACE-X" },
       {
         property: "og:description",
-        content: "Graph-first view of mule chains, layering and circular flows across the synthetic TRACE corpus.",
+        content: "Graph-first view of mule chains, layering and circular flows across the synthetic TRACE-X corpus.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
