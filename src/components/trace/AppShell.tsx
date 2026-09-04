@@ -61,11 +61,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     const q = query.trim().toLowerCase();
     if (q.length < 2) return null;
     return {
-      accounts: db.accounts.filter((a) => a.id.toLowerCase().includes(q) || a.holder.toLowerCase().includes(q)).slice(0, 5),
-      networks: db.clusters.filter((c) => c.id.toLowerCase().includes(q) || c.name.toLowerCase().includes(q)).slice(0, 5),
+      accounts: db.accounts
+        .filter(
+          (a) =>
+            a.id.toLowerCase().includes(q) ||
+            a.holder.toLowerCase().includes(q) ||
+            a.role_tag.toLowerCase().includes(q) ||
+            a.current_status.toLowerCase().includes(q),
+        )
+        .slice(0, 5),
+      networks: db.clusters
+        .filter(
+          (c) =>
+            c.id.toLowerCase().includes(q) ||
+            c.name.toLowerCase().includes(q) ||
+            c.pattern.toLowerCase().includes(q),
+        )
+        .slice(0, 5),
       transactions: db.transactions.filter((t) => t.transaction_id.toLowerCase().includes(q)).slice(0, 5),
     };
   }, [query]);
+
+  const clearSearch = () => setQuery("");
 
   const groups = NAV.reduce<Record<string, typeof NAV>>((acc, item) => {
     (acc[item.group] ??= []).push(item);
@@ -181,7 +198,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 />
               </div>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-[420px] p-0">
+            <PopoverContent
+              align="start"
+              className="w-[420px] p-0"
+              onOpenAutoFocus={(event) => event.preventDefault()}
+            >
               {!results ? (
                 <p className="px-3 py-6 text-center text-xs text-muted-foreground">
                   Type at least 2 characters to search the synthetic corpus.
@@ -192,8 +213,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     {results.networks.map((c) => (
                       <button
                         key={c.id}
-                        onClick={() => {
+                         onClick={() => {
                           setActiveNetworkId(c.id);
+                           clearSearch();
                           navigate({ to: "/network" });
                         }}
                         className="flex w-full items-center justify-between gap-2 px-3 py-1.5 hover:bg-accent"
@@ -210,6 +232,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         key={a.id}
                         to="/accounts/$accountId"
                         params={{ accountId: a.id }}
+                         onClick={clearSearch}
                         className="flex w-full items-center justify-between gap-2 px-3 py-1.5 hover:bg-accent"
                       >
                         <span className="mono">{a.id}</span>
@@ -219,13 +242,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     ))}
                   </SearchGroup>
                   <SearchGroup title="Transactions">
-                    {results.transactions.map((t) => (
-                      <div key={t.transaction_id} className="flex items-center justify-between gap-2 px-3 py-1.5">
+                     {results.transactions.map((t) => (
+                       <button
+                         key={t.transaction_id}
+                         type="button"
+                         onClick={() => {
+                           const network = db.clusters.find((c) => c.transaction_ids.includes(t.transaction_id));
+                           if (network) setActiveNetworkId(network.id);
+                           clearSearch();
+                           navigate({ to: "/timeline" });
+                         }}
+                         className="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-left hover:bg-accent"
+                       >
                         <span className="mono">{t.transaction_id}</span>
                         <span className="mono text-muted-foreground">{compactCurrency(t.amount)}</span>
-                      </div>
+                       </button>
                     ))}
                   </SearchGroup>
+                   {!results.accounts.length && !results.networks.length && !results.transactions.length && (
+                     <p className="px-3 py-6 text-center text-xs text-muted-foreground">No matching corpus records.</p>
+                   )}
                 </div>
               )}
             </PopoverContent>
