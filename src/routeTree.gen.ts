@@ -21,6 +21,7 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as TracerRouteImport } from './routes/tracer'
 import { Route as AccountsAccountIdRouteImport } from './routes/accounts.$accountId'
+import { Route as CasesCaseIdRouteImport } from './routes/cases.$caseId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -82,13 +83,18 @@ const AccountsAccountIdRoute = AccountsAccountIdRouteImport.update({
   path: '/$accountId',
   getParentRoute: () => AccountsRoute,
 } as any)
+const CasesCaseIdRoute = CasesCaseIdRouteImport.update({
+  id: '/$caseId',
+  path: '/$caseId',
+  getParentRoute: () => CasesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRouteWithChildren
   '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
-  '/cases': typeof CasesRoute
+  '/cases': typeof CasesRouteWithChildren
   '/explain': typeof ExplainRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
@@ -96,13 +102,14 @@ export interface FileRoutesByFullPath {
   '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
+  '/cases/$caseId': typeof CasesCaseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRouteWithChildren
   '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
-  '/cases': typeof CasesRoute
+  '/cases': typeof CasesRouteWithChildren
   '/explain': typeof ExplainRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
+  '/cases/$caseId': typeof CasesCaseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,7 +125,7 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRouteWithChildren
   '/ai': typeof AiRoute
   '/alerts': typeof AlertsRoute
-  '/cases': typeof CasesRoute
+  '/cases': typeof CasesRouteWithChildren
   '/explain': typeof ExplainRoute
   '/lab': typeof LabRoute
   '/network': typeof NetworkRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/timeline': typeof TimelineRoute
   '/tracer': typeof TracerRoute
   '/accounts/$accountId': typeof AccountsAccountIdRoute
+  '/cases/$caseId': typeof CasesCaseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
+    | '/cases/$caseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
+    | '/cases/$caseId'
   id:
     | '__root__'
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/tracer'
     | '/accounts/$accountId'
+    | '/cases/$caseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,7 +188,7 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRouteWithChildren
   AiRoute: typeof AiRoute
   AlertsRoute: typeof AlertsRoute
-  CasesRoute: typeof CasesRoute
+  CasesRoute: typeof CasesRouteWithChildren
   ExplainRoute: typeof ExplainRoute
   LabRoute: typeof LabRoute
   NetworkRoute: typeof NetworkRoute
@@ -271,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsAccountIdRouteImport
       parentRoute: typeof AccountsRoute
     }
+    '/cases/$caseId': {
+      id: '/cases/$caseId'
+      path: '/$caseId'
+      fullPath: '/cases/$caseId'
+      preLoaderRoute: typeof CasesCaseIdRouteImport
+      parentRoute: typeof CasesRoute
+    }
   }
 }
 
@@ -286,12 +305,22 @@ const AccountsRouteWithChildren = AccountsRoute._addFileChildren(
   AccountsRouteChildren,
 )
 
+interface CasesRouteChildren {
+  CasesCaseIdRoute: typeof CasesCaseIdRoute
+}
+
+const CasesRouteChildren: CasesRouteChildren = {
+  CasesCaseIdRoute: CasesCaseIdRoute,
+}
+
+const CasesRouteWithChildren = CasesRoute._addFileChildren(CasesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRouteWithChildren,
   AiRoute: AiRoute,
   AlertsRoute: AlertsRoute,
-  CasesRoute: CasesRoute,
+  CasesRoute: CasesRouteWithChildren,
   ExplainRoute: ExplainRoute,
   LabRoute: LabRoute,
   NetworkRoute: NetworkRoute,
