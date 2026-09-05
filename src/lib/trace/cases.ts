@@ -126,7 +126,7 @@ function localCaseFromNetwork(networkId: string, alertId: string | null) {
   if (!cluster) throw new Error("The selected network is no longer available.");
   const now = new Date().toISOString();
   const item = normaliseCase({
-    id: `demo-${crypto.randomUUID()}`,
+    id: `demo-${globalThis.crypto.randomUUID()}`,
     alert_id: alertId,
     network_id: networkId,
     title: `${cluster.name} investigation`,
@@ -209,5 +209,5 @@ export async function addCaseFeedback(caseId: string, outcome: CaseDecision, inv
     // The local preview fallback has no feedback table; the case decision below remains visible.
   }
   const status: CaseStatus = outcome === "Needs Review" ? "Investigating" : "Resolved";
-  return updateCase(caseId, { outcome: undefined, status, decision: outcome, notes: investigatorNote || null } as never);
+  return updateCase(caseId, { status, decision: outcome, notes: investigatorNote || null });
 }
