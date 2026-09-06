@@ -49,6 +49,16 @@ export interface TraceCase {
 }
 
 const LOCAL_CASES_KEY = "trace.demo.cases";
+const BACKEND_TIMEOUT_MS = 1800;
+
+async function withTimeout<T>(request: PromiseLike<T>) {
+  return Promise.race([
+    request,
+    new Promise<never>((_, reject) => {
+      window.setTimeout(() => reject(new Error("Backend unavailable in prototype preview")), BACKEND_TIMEOUT_MS);
+    }),
+  ]);
+}
 
 function isCaseStatus(value: string): value is CaseStatus {
   return CASE_STATUSES.includes(value as CaseStatus);
@@ -159,7 +169,7 @@ function localCaseFromNetwork(networkId: string, alertId: string | null) {
 
 export async function listCases() {
   try {
-    const { data, error } = await supabase.from("cases").select("*").order("updated_at", { ascending: false });
+    const { data, error } = await withTimeout(supabase.from("cases").select("*").order("updated_at", { ascending: false }));
     if (error) throw error;
     return (data ?? []).map((item) => normaliseCase(item));
   } catch {
@@ -169,7 +179,7 @@ export async function listCases() {
 
 export async function getCase(id: string) {
   try {
-    const { data, error } = await supabase.from("cases").select("*").eq("id", id).maybeSingle();
+    const { data, error } = await withTimeout(supabase.from("cases").select("*").eq("id", id).maybeSingle());
     if (error) throw error;
     return data ? normaliseCase(data) : readLocalCases().find((item) => item.id === id) ?? null;
   } catch {
@@ -199,7 +209,7 @@ export async function createCaseFromNetwork(networkId: string, alertId: string |
     attached_evidence: evidence as unknown as Json,
   };
   try {
-    const { data, error } = await supabase.from("cases").insert(payload).select("*").single();
+    const { data, error } = await withTimeout(supabase.from("cases").insert(payload).select("*").single());
     if (error) throw error;
     return normaliseCase(data);
   } catch {
@@ -209,7 +219,7 @@ export async function createCaseFromNetwork(networkId: string, alertId: string |
 
 export async function updateCase(id: string, changes: { status?: CaseStatus; notes?: string | null; decision?: CaseDecision | null }) {
   try {
-    const { data, error } = await supabase.from("cases").update(changes).eq("id", id).select("*").single();
+    const { data, error } = await withTimeout(supabase.from("cases").update(changes).eq("id", id).select("*").single());
     if (error) throw error;
     return normaliseCase(data);
   } catch {
@@ -222,11 +232,11 @@ export async function updateCase(id: string, changes: { status?: CaseStatus; not
 
 export async function addCaseFeedback(caseId: string, outcome: CaseDecision, investigatorNote: string) {
   try {
-    const { error } = await supabase.from("case_feedback").insert({
+    const { error } = await withTimeout(supabase.from("case_feedback").insert({
       case_id: caseId,
       outcome,
       investigator_note: investigatorNote || null,
-    });
+    }));
     if (error) throw error;
   } catch {
     // The local preview fallback has no feedback table; the case decision below remains visible.
