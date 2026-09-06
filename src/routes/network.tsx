@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Network, Pause, Play, RotateCcw, X } from "lucide-react";
+import { BriefcaseBusiness, Network, Pause, Play, RotateCcw, X } from "lucide-react";
 import {
   PATTERN_META,
   db,
@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createCaseFromNetwork } from "@/lib/trace/cases";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/network")({
   head: () => ({
@@ -57,7 +59,7 @@ const TIME_WINDOWS = [
 ] as const;
 
 function NetworkPage() {
-  const { activeNetworkId, setActiveNetworkId } = useTrace();
+  const { activeNetworkId, setActiveNetworkId, activeAlertId } = useTrace();
   const cluster = db.getCluster(activeNetworkId)!;
 
   const [selected, setSelected] = useState<string | null>(cluster.central_account);
@@ -174,6 +176,16 @@ function NetworkPage() {
 
   const fingerprint = whatIf.fingerprint.velocity ? whatIf.fingerprint : cluster.fingerprint;
 
+  const createCase = async () => {
+    try {
+      const item = await createCaseFromNetwork(cluster.id, activeAlertId);
+      toast.success("Case created", { description: item.title });
+      window.location.assign(`/cases/${item.id}`);
+    } catch (error) {
+      toast.error("Could not create case", { description: error instanceof Error ? error.message : "Try again." });
+    }
+  };
+
   return (
     <div className="space-y-5">
       <header className="panel-surface rounded-lg p-5">
@@ -193,6 +205,9 @@ function NetworkPage() {
           </div>
           <div className="flex items-center gap-4">
             <ScoreRing score={whatIf.score || baseline} label={whatIf.level ?? cluster.level} />
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => void createCase()}>
+              <BriefcaseBusiness className="size-3.5" /> Create case
+            </Button>
           </div>
         </div>
         <dl className="mt-4 grid gap-3 sm:grid-cols-4">
