@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Filter, Search, Telescope } from "lucide-react";
+import { BriefcaseBusiness, Filter, Search, Telescope } from "lucide-react";
 import { PATTERN_META, db, type PatternType, type RiskLevel } from "@/lib/trace/engine";
 import { compactCurrency, dateTime, relative } from "@/lib/trace/format";
 import { EmptyState, PatternBadge, RiskBadge, StatusPill } from "@/components/trace/primitives";
@@ -15,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createCaseFromNetwork } from "@/lib/trace/cases";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/alerts")({
   head: () => ({
@@ -42,7 +44,7 @@ const WINDOWS = [
 ];
 
 function Alerts() {
-  const { setActiveNetworkId } = useTrace();
+  const { setActiveNetworkId, setActiveAlertId } = useTrace();
   const navigate = useNavigate();
   const [level, setLevel] = useState("All");
   const [status, setStatus] = useState("All");
@@ -78,6 +80,18 @@ function Alerts() {
   const investigate = (networkId: string) => {
     setActiveNetworkId(networkId);
     navigate({ to: "/network" });
+  };
+
+  const createCase = async (alertId: string, networkId: string) => {
+    setActiveNetworkId(networkId);
+    setActiveAlertId(alertId);
+    try {
+      const item = await createCaseFromNetwork(networkId, alertId);
+      toast.success("Case created", { description: item.title });
+      navigate({ to: "/cases/$caseId", params: { caseId: item.id } });
+    } catch (error) {
+      toast.error("Could not create case", { description: error instanceof Error ? error.message : "Try again." });
+    }
   };
 
   return (
@@ -212,9 +226,14 @@ function Alerts() {
                     <p className="mono text-[10px] text-muted-foreground">{dateTime(a.created_at)}</p>
                   </td>
                   <td className="px-3 py-2.5 text-right">
-                    <Button size="sm" variant="outline" className="gap-1.5" onClick={() => investigate(a.network_id)}>
-                      <Telescope className="size-3.5" /> Investigate
-                    </Button>
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="outline" className="gap-1.5" onClick={() => investigate(a.network_id)}>
+                        <Telescope className="size-3.5" /> Investigate
+                      </Button>
+                      <Button size="sm" variant="ghost" className="gap-1.5" onClick={() => void createCase(a.id, a.network_id)}>
+                        <BriefcaseBusiness className="size-3.5" /> Case
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}

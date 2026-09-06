@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Network, Pause, Play, RotateCcw, X } from "lucide-react";
+import { BriefcaseBusiness, Network, Pause, Play, RotateCcw, X } from "lucide-react";
 import {
   PATTERN_META,
   db,
@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createCaseFromNetwork } from "@/lib/trace/cases";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/network")({
   head: () => ({
