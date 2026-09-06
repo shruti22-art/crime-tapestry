@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
-import { db, tracePath, type Json } from "./engine";
+import type { Json } from "@/integrations/supabase/types";
+import { db, tracePath } from "./engine";
 
 export const CASE_STATUSES = ["Open", "Investigating", "Escalated", "Resolved"] as const;
 export type CaseStatus = (typeof CASE_STATUSES)[number];
@@ -53,14 +54,28 @@ function isCaseStatus(value: string): value is CaseStatus {
   return CASE_STATUSES.includes(value as CaseStatus);
 }
 
-function normaliseCase(value: Partial<TraceCase> & Pick<TraceCase, "id" | "title">): TraceCase {
+function normaliseCase(value: {
+  id: string;
+  title: string;
+  alert_id?: string | null;
+  network_id?: string | null;
+  status?: string | null;
+  decision?: string | null;
+  notes?: string | null;
+  risk_score?: number | null;
+  pattern_tags?: string[] | null;
+  attached_evidence?: unknown;
+  ai_summary?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}): TraceCase {
   return {
     id: value.id,
     alert_id: value.alert_id ?? null,
     network_id: value.network_id ?? null,
     title: value.title,
     status: value.status && isCaseStatus(value.status) ? value.status : "Open",
-    decision: value.decision ?? null,
+    decision: value.decision === "Confirmed Suspicious" || value.decision === "False Positive" || value.decision === "Needs Review" ? value.decision : null,
     notes: value.notes ?? null,
     risk_score: value.risk_score ?? 0,
     pattern_tags: value.pattern_tags ?? [],
@@ -77,7 +92,7 @@ function readLocalCases() {
     const stored = window.localStorage.getItem(LOCAL_CASES_KEY);
     const parsed: unknown = stored ? JSON.parse(stored) : [];
     return Array.isArray(parsed)
-      ? parsed.filter((item): item is Partial<TraceCase> & Pick<TraceCase, "id" | "title"> =>
+      ? parsed.filter((item): item is Parameters<typeof normaliseCase>[0] =>
           typeof item === "object" && item !== null && "id" in item && "title" in item,
         ).map(normaliseCase)
       : [];
@@ -166,7 +181,15 @@ export async function createCaseFromNetwork(networkId: string, alertId: string |
   const cluster = db.getCluster(networkId);
   if (!cluster) throw new Error("The selected network is no longer available.");
   const evidence = buildEvidence(networkId, alertId);
-  const payload = {
+  const payload: {
+    alert_id: string | null;
+    network_id: string;
+    title: string;
+    status: CaseStatus;
+    risk_score: number;
+    pattern_tags: string[];
+    attached_evidence: Json;
+  } = {
     alert_id: alertId,
     network_id: networkId,
     title: `${cluster.name} investigation`,
